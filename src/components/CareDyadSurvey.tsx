@@ -217,11 +217,23 @@ export const CareDyadSurvey = () => {
       </div>
       
       <div className="max-w-3xl mx-auto space-y-8">
-        <SurveyHeader 
+        <SurveyHeader
           title="CareDyadBond Project"
           description="Survivor & Caregiver Connection Survey"
           progress={progress}
         />
+
+        {/* Video Section */}
+        <div className="w-full max-w-2xl mx-auto mb-8">
+          <video 
+            className="w-full h-auto rounded-xl shadow-lg border border-border/20"
+            controls
+            poster="/lovable-uploads/penguin-dyad.png"
+          >
+            <source src="/cdbp.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </div>
 
         {/* Welcome Section */}
         {currentSection === 0 && (
