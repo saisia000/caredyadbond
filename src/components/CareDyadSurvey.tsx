@@ -31,7 +31,8 @@ interface SurveyData {
   
   // Section 3: Support & Coping
   improveTogether: string;
-  usedTechnology: string;
+  copingBehaviors: string;
+  usedTechnology: string[];
   technologyDetails: string;
   digitalToolOpenness: string;
   usefulFeatures: string[];
@@ -62,7 +63,8 @@ const initialData: SurveyData = {
   relationshipStress: "",
   meaningfulMoment: "",
   improveTogether: "",
-  usedTechnology: "",
+  copingBehaviors: "",
+  usedTechnology: [],
   technologyDetails: "",
   digitalToolOpenness: "",
   usefulFeatures: [],
@@ -108,6 +110,7 @@ export const CareDyadSurvey = () => {
         relationship_stress: data.relationshipStress,
         meaningful_moment: data.meaningfulMoment,
         improve_together: data.improveTogether,
+        coping_behaviors: data.copingBehaviors,
         used_technology: data.usedTechnology,
         technology_details: data.technologyDetails,
         digital_tool_openness: data.digitalToolOpenness,
@@ -379,7 +382,11 @@ export const CareDyadSurvey = () => {
         {/* Section 3: Support & Coping */}
         {currentSection === 3 && (
           <QuestionGroup title="Section 3: Support & Coping">
-            <QuestionField label="What is something you wish you and your survivor/caregiver could do better together?" required>
+            <QuestionField 
+              label="What emotional connection or shared experience do you wish you and your survivor/caregiver had more of?" 
+              description="Think about conversations, rituals, ways of feeling close or supported."
+              required
+            >
               <Textarea
                 value={data.improveTogether}
                 onChange={(e) => updateData("improveTogether", e.target.value)}
@@ -388,20 +395,33 @@ export const CareDyadSurvey = () => {
               />
             </QuestionField>
 
-            <QuestionField label="Have you ever used any technology or app to support your emotions or relationships?" required>
-              <RadioGroup
-                name="usedTechnology"
-                options={[
-                  { value: "yes", label: "Yes" },
-                  { value: "no", label: "No" }
-                ]}
-                value={data.usedTechnology}
-                onChange={(value) => updateData("usedTechnology", value)}
+            <QuestionField label="When you're feeling emotionally disconnected or overwhelmed in your survivor–caregiver relationship, what do you usually do?" required>
+              <Textarea
+                value={data.copingBehaviors}
+                onChange={(e) => updateData("copingBehaviors", e.target.value)}
+                placeholder="e.g., talk to someone, meditate, distract yourself, use an app, ignore it, etc."
+                className="min-h-24 resize-none border-border focus:border-primary"
               />
             </QuestionField>
 
-            {data.usedTechnology === "yes" && (
-              <QuestionField label="Which one(s)? Please name or describe." required>
+            <QuestionField label="Have you ever used any technology or app to support your emotions or your relationship with your survivor/caregiver?" required>
+              <CheckboxGroup
+                name="usedTechnology"
+                options={[
+                  { value: "meditation", label: "Meditation (e.g. Calm, Headspace)" },
+                  { value: "journaling", label: "Journaling or mood tracking (e.g. Wysa, Daylio)" },
+                  { value: "therapy", label: "Therapy (e.g. BetterHelp, Talkspace)" },
+                  { value: "communities", label: "Support communities (e.g. Facebook Groups, CaringBridge)" },
+                  { value: "none", label: "None of these" },
+                  { value: "other", label: "Other (please specify)" }
+                ]}
+                values={data.usedTechnology}
+                onChange={(values) => updateData("usedTechnology", values)}
+              />
+            </QuestionField>
+
+            {data.usedTechnology.length > 0 && !data.usedTechnology.includes("none") && (
+              <QuestionField label="Which one(s)? Tell us more." required>
                 <Textarea
                   value={data.technologyDetails}
                   onChange={(e) => updateData("technologyDetails", e.target.value)}
@@ -444,7 +464,11 @@ export const CareDyadSurvey = () => {
               />
             </QuestionField>
 
-            <QuestionField label="What worries or hesitations would you have about using a tech-based or AI-powered support tool?" required>
+            <QuestionField 
+              label="What worries or hesitations would you have about using a tech-based or AI-powered support tool?" 
+              description="e.g. privacy, emotional tone, cost, effectiveness, trust, too impersonal, etc."
+              required
+            >
               <Textarea
                 value={data.techWorries}
                 onChange={(e) => updateData("techWorries", e.target.value)}
